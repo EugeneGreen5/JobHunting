@@ -8,7 +8,7 @@ public class ResumeEntityConfiguration : BaseEntityConfiguration<Resume>
 {
     public override void ConfigEntity(EntityTypeBuilder<Resume> builder)
     {
-        builder.ToTable("resume");
+        //builder.ToTable("resume");
 
     }
 }

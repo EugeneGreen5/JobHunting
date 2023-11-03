@@ -1,0 +1,10 @@
+﻿@JobHunting_HostAddress = https://localhost:7091
+
+POST {{JobHunting_HostAddress}}/api/person/auth?name=admin&password=admin
+Content-Type: application/json
+
+{
+
+}
+
+###

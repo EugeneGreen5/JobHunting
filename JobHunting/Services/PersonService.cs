@@ -1,22 +1,26 @@
-﻿using JobHunting.Data;
-using JobHunting.Models.DTO;
+﻿using JobHunting.Models.DTO;
 using JobHunting.Models.Entity;
 using JobHunting.Repositories;
+using JobHunting.Services.Password;
 
 namespace JobHunting.Services;
 
 public class PersonService : IPersonService
 {
     private readonly IPersonRepository _personRepository;
-    public PersonService(IPersonRepository personRepository)
+    private readonly IEnumerable<IPassword> _listMethods;
+    public PersonService(IPersonRepository personRepository, IEnumerable<IPassword> listMethods)
     {
         _personRepository = personRepository;
+        _listMethods = listMethods;
     }
 
     public async Task<ExtensionDTO> AddPersonAsync(Person newPerson)
     {
 
         if (newPerson.Resumes is null) newPerson.Resumes = new List<Resume>();
+
+        newPerson.Password = _listMethods.ToList()[new Random().Next(0, 3)].Encryption(newPerson.Password);
 
         await _personRepository.AddPersonAsync(newPerson);
         return new ExtensionDTO
@@ -42,6 +46,17 @@ public class PersonService : IPersonService
         return (new ExtensionDTO { Code = 200, Information = "Объект"}, currentPerson);
     }
 
+    public async Task<Person> GetPersonForAuth(String name, string password)
+    {
+        Person? currentPerson;
+        foreach(var method in _listMethods)
+        {
+            currentPerson = await _personRepository.GetPersonForAuth(name, method.Encryption(password));
+            if (currentPerson is not null) return currentPerson;
+        }
+        return null;
+    }
+
     public async Task<ExtensionDTO> UpdatePersonByIdAsync(Guid id, PersonDTO newPerson)
     {
         var currentPerson = await _personRepository.GetPersonByIdAsync(id);
@@ -51,5 +66,5 @@ public class PersonService : IPersonService
 
         return new ExtensionDTO { Code = 200, Information = "Обновлено" };
     }
-        
+    
 }

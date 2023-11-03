@@ -1,10 +1,7 @@
 ﻿namespace JobHunting.Models.DTO;
 
-public class PersonDTO
+public class PersonDTOResponse
 {
-    /// <summary>
-    /// ФИО пользователя
-    /// </summary>
     public string Name { get; set; }
     /// <summary>
     /// Email пользователя
@@ -14,8 +11,4 @@ public class PersonDTO
     /// Телефон пользователя
     /// </summary>
     public string Phone { get; set; }
-    /// <summary>
-    /// Город, в котором пользователь ищет работу
-    /// </summary>
-    public City? City { get; set; }
 }

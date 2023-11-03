@@ -1,4 +1,4 @@
-﻿using JobHunting.Services.Password;
+﻿/*using JobHunting.Services.Password;
 using Microsoft.AspNetCore.Mvc;
 
 namespace JobHunting.Controllers;
@@ -15,7 +15,7 @@ public class PasswordController
 
     [HttpGet]
     public string RandomGeneratePassword()
-     {
+    {
         string validChars = "ABCDEFGHJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*?_-";
         Random random = new Random();
         int length = 15;
@@ -25,12 +25,12 @@ public class PasswordController
             chars[i] = validChars[random.Next(0, validChars.Length)];
         }
 
-/*        List<string> strings = new List<string>();
+*//*        List<string> strings = new List<string>();
         foreach (var elem in _listMethods)
         {
             strings.Add(elem.Encryption("123"));
         }
-        return strings;*/
+        return strings;*//*
 
 
         //return _listMethods.ToList()[new Random().Next(0,3)].Encryption("321");
@@ -38,3 +38,4 @@ public class PasswordController
     }
       
 }
+*/

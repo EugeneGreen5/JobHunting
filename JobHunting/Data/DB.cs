@@ -1,4 +1,4 @@
-﻿using JobHunting.Models.Entity;
+﻿/*using JobHunting.Models.Entity;
 using JobHunting.Models;
 
 namespace JobHunting.Data;
@@ -66,11 +66,12 @@ public class DB
             }
         };
 
-        /*resumes.Add(firstResume);
+        *//*resumes.Add(firstResume);
         resumes.Add(secondResume);
-        resumes.Add(thirdResume);*/
+        resumes.Add(thirdResume);*//*
 
         return new List<Person> { firstPerson, secondPerson, thirdPerson };
 
     }
 }
+*/

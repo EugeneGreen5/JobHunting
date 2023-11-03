@@ -31,19 +31,34 @@ namespace JobHunting.Migrations
                     b.Property<int?>("City")
                         .HasColumnType("int");
 
+                    b.Property<int>("DecodeMethod")
+                        .HasColumnType("int");
+
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
                         .IsRequired()
+                        .HasColumnType("nchar(100)");
+
+                    b.Property<string>("Password")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Phone")
                         .IsRequired()
+                        .HasMaxLength(16)
+                        .HasColumnType("nvarchar(16)")
+                        .HasColumnName("mobile");
+
+                    b.Property<string>("Role")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("City");
 
                     b.ToTable("person", (string)null);
                 });
@@ -54,29 +69,36 @@ namespace JobHunting.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
 
                     b.Property<bool>("IsFullEmployment")
-                        .HasColumnType("bit");
+                        .HasColumnType("bit")
+                        .HasColumnName("full_employment");
 
                     b.Property<bool>("IsPartTimeEmployment")
-                        .HasColumnType("bit");
+                        .HasColumnType("bit")
+                        .HasColumnName("part_time_employment");
 
                     b.Property<bool>("IsTrainee")
-                        .HasColumnType("bit");
+                        .HasColumnType("bit")
+                        .HasColumnName("trainee");
 
                     b.Property<bool>("IsVolunteering")
-                        .HasColumnType("bit");
+                        .HasColumnType("bit")
+                        .HasColumnName("volunteering");
 
                     b.Property<Guid>("PersonId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int?>("Salary")
+                    b.Property<int>("Salary")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.ToTable("resume", (string)null);
+                    b.HasIndex("Salary");
+
+                    b.ToTable("resumes");
                 });
 
             modelBuilder.Entity("JobHunting.Models.Entity.Resume", b =>

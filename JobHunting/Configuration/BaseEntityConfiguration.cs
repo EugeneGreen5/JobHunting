@@ -10,7 +10,6 @@ public abstract class BaseEntityConfiguration<TEntity> : IEntityTypeConfiguratio
     public void Configure(EntityTypeBuilder<TEntity> builder)
     {
         builder.HasKey(x => x.Id);
-        builder.Property(x => x.Id);
 
         ConfigEntity(builder);
     }   

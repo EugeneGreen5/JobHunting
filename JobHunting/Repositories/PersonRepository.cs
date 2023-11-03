@@ -26,6 +26,9 @@ public class PersonRepository : IPersonRepository
     public async Task<IList<Person>> GetPersonsAsync() =>
         _context.Persons.Include(x => x.Resumes).ToList();
 
+    public async Task<Person?> GetPersonForAuth(string name, string password) =>
+        _context.Persons.FirstOrDefault(x => x.Password.Equals(password) && x.Name.Equals(name));
+
     public async Task<bool> DeleteByIdAsync(Guid id)
     {
         var person = await GetPersonByIdAsync(id);

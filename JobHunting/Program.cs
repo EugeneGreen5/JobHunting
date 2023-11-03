@@ -1,12 +1,15 @@
 using AppMiddlewarExample.Middleware;
 using JobHunting.Data;
+using JobHunting.Helpers;
 using JobHunting.Middleware;
 using JobHunting.Repositories;
 using JobHunting.Services;
 using JobHunting.Services.Password;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
+using System.Security.Claims;
 
 internal class Program
 {
@@ -24,11 +27,54 @@ internal class Program
             {
                 Version = "v1",
                 Title = "JobHunting API",
-                Description = "Минимальное API"
+                Description = "API"
             });
-
+            c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+            {
+                In = ParameterLocation.Header,
+                Description = "Please enter token",
+                Name = "Authorization",
+                Type = SecuritySchemeType.Http,
+                BearerFormat = "JWT",
+                Scheme = "bearer"
+            });
+            c.AddSecurityRequirement(new OpenApiSecurityRequirement
+            {
+                {
+                    new OpenApiSecurityScheme
+                    {
+                        Reference = new OpenApiReference
+                        {
+                            Type=ReferenceType.SecurityScheme,
+                            Id="Bearer"
+                        }
+                    },
+                    new string[]{}
+                }
+            });
             var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
             c.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
+        });
+
+        builder.Services.AddAuthentication("Bearer")
+            .AddJwtBearer(options =>
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidIssuer = JWTOptions.ISSUER,
+                    ValidateAudience = true,
+                    ValidAudience = JWTOptions.AUDIENCE,
+                    ValidateLifetime = true,
+                    IssuerSigningKey = JWTOptions.GetSymmetricSecurityKey(),
+                    ValidateIssuerSigningKey = true,
+                });
+
+        builder.Services.AddAuthorization(opts =>
+        {
+/*            opts.AddPolicy("AdminUser", options =>
+            {
+                options.RequireRole("")
+            });*/
         });
 
         builder.Services.AddControllers();
@@ -40,6 +86,7 @@ internal class Program
         builder.Services.AddScoped<IResumeService, ResumeService>();
         builder.Services.AddScoped<IPersonRepository, PersonRepository>();
         builder.Services.AddScoped<IResumeRepository, ResumeRepository>();
+        builder.Services.AddScoped<ICreditHistoryRepository, CreditHistoryRepository>();
 
         builder.Services.AddTransient<IPassword, SHA256EncryptionPassword>();
         builder.Services.AddTransient<IPassword, SHA512EncryptionPassword>();
@@ -59,6 +106,8 @@ internal class Program
             });
         }
 
+        app.UseAuthentication();
+        app.UseAuthorization();
         app.MapControllers();
         app.UseMiddleware<LoggerMiddleware>();
         app.UseMiddleware<JsonValidationMiddleware>();

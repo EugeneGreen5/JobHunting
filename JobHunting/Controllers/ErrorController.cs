@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿/*using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel;
 
 namespace JobHunting.Controllers;
@@ -12,3 +12,4 @@ public class ErrorController : ControllerBase
     public async Task<IActionResult> NotFound()
         => NotFound("Страница не найдена");
 }
+*/
