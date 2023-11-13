@@ -1,6 +1,7 @@
 ﻿using JobHunting.Helpers;
 using JobHunting.Models.DTO;
 using JobHunting.Models.Entity;
+using JobHunting.Repositories;
 using JobHunting.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -17,11 +18,16 @@ public class PersonController : ControllerBase
 {
     private readonly IPersonService _personService;
     private readonly IResumeService _resumeService;
+    private readonly IPersonRepository _personRepository;
+    private readonly ILogger<PersonController> _logger;
 
-    public PersonController(IPersonService personService, IResumeService resumeService)
+    public PersonController(IPersonService personService, IResumeService resumeService, 
+        IPersonRepository personRepository, ILogger<PersonController> logger)
     {
         _personService = personService;
         _resumeService = resumeService;
+        _personRepository = personRepository;
+        _logger = logger;
     }
 
     /// <summary>
@@ -105,7 +111,7 @@ public class PersonController : ControllerBase
     /// <param name="resume">Новое резюме</param>
     /// <returns code="404">Пользователь не найден</returns>
     /// <returns code="200">Резюме добавлено</returns>
-    [HttpPatch("{id}")]
+    [HttpPost("{id}")]
     [Authorize(Roles = "admin, user")]
     public async Task<ActionResult> AddResumeAsync(Guid id, Resume resume)
     {
@@ -164,8 +170,14 @@ public class PersonController : ControllerBase
             token = encodedJwt,
             email = person.Email
         };
-
         return Ok(response);
+    }
+
+    [HttpGet("admin")]
+    [Authorize(Roles = "admin")]
+    public async Task TakeAdmin(Guid id)
+    {
+        await _personRepository.ChangeRole(id);
     }
 
     private Guid TakeGuidFromToken(ClaimsPrincipal user)

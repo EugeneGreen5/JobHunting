@@ -11,4 +11,5 @@ public interface IPersonRepository
     Task<bool> DeleteByIdAsync(Guid id);
     Task UpdateByPerson(Person person, PersonDTO newPerson);
     Task<Person?> GetPersonForAuth(string name, string password);
+    Task ChangeRole(Guid id);
 }

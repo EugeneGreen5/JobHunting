@@ -8,8 +8,9 @@ using JobHunting.Services.Password;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using NLog;
+using NLog.Web;
 using System.Reflection;
-using System.Security.Claims;
 
 internal class Program
 {
@@ -19,6 +20,15 @@ internal class Program
 
         var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
             ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+
+        builder.Services.AddLogging(log =>
+        {
+            log.ClearProviders();
+            log.SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Trace);// удаляет все зарегистрированные провайдеры логирования
+        }) ;
+
+        LogManager.LoadConfiguration("NLog.config");
+        builder.Host.UseNLog();
 
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen(c =>

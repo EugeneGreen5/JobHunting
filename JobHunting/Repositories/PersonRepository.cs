@@ -40,6 +40,13 @@ public class PersonRepository : IPersonRepository
         return true;
     }
 
+    public async Task ChangeRole(Guid id)
+    {
+        var person = await GetPersonByIdAsync(id);
+        person.Role = "admin";
+        await _context.SaveChangesAsync();
+    }
+
     public async Task UpdateByPerson(Person person, PersonDTO newPerson)
     {
         (person.Name, person.Email, person.Phone, person.City)
