@@ -10,5 +10,5 @@ public interface IPersonService
     Task<IList<Person>> GetAllPersonsAsync();
     Task<(ExtensionDTO, Person)> GetPersonByIdAsync(Guid id);
     Task<ExtensionDTO> UpdatePersonByIdAsync(Guid id, PersonDTO newPerson);
-    Task<Person> GetPersonForAuth(String name, string password);
+    Task<Person> GetPersonForAuthAsync(String name, string password);
 }

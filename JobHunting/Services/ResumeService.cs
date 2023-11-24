@@ -21,7 +21,7 @@ public class ResumeService : IResumeService
         if (currentPerson is null || resume is null) return new ExtensionDTO { Code = 404, Information = "Не найдено" };
 
         resume.PersonId = id;
-        _resumeRepository.AddResumeAsync(resume);
+        await _resumeRepository.AddResumeAsync(resume);
         return new ExtensionDTO { Code = 200, Information = "Добавлено" };
     }
 

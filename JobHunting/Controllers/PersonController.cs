@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using System.Security.Principal;
 
 namespace JobHunting.Controllers;
 
@@ -142,11 +141,11 @@ public class PersonController : ControllerBase
     }
 
     [HttpPost("auth")]
-    [ApiExplorerSettings(IgnoreApi = true)]
-    public async Task<ActionResult<string>> Auth(String name, string password)
+    //[ApiExplorerSettings(IgnoreApi = true)]
+    public async Task<ActionResult<string>> AuthAsync(string name, string password)
     {
-        var person = (await _personService.GetPersonForAuth(name, password));
-        if (person is null) return Unauthorized();
+        var person = (await _personService.GetPersonForAuthAsync(name, password));
+        if (person is null) return NotFound();
 
         var claims = new List<Claim>{
             new Claim(ClaimsIdentity.DefaultNameClaimType, person.Id.ToString()),

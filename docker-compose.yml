@@ -1,0 +1,31 @@
+version: '3.8'
+
+networks:
+  dev_job:
+    driver: bridge
+
+services:
+  jobhunt:
+    container_name: jobhunt
+    #image: ${DOCKER_REGISTRY-}jobhunting:dev
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+     - ms
+    ports:
+     - "32774:80"
+     - "32775:443"
+    networks:
+      - dev_job
+
+  ms:
+    image: "mcr.microsoft.com/mssql/server:2017-latest"
+    ports:
+     - "1433:1433"
+    environment:
+      SA_PASSWORD: "Asdfghjkl123*"
+      ACCEPT_EULA: "Y"
+    networks:
+      - dev_job
+

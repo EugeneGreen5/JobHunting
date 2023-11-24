@@ -1,4 +1,5 @@
 using AppMiddlewarExample.Middleware;
+using JobHunting.Controllers;
 using JobHunting.Data;
 using JobHunting.Helpers;
 using JobHunting.Middleware;
@@ -12,7 +13,7 @@ using NLog;
 using NLog.Web;
 using System.Reflection;
 
-internal class Program
+public class Program
 {
     private static void Main(string[] args)
     {
@@ -92,6 +93,7 @@ internal class Program
         builder.Services.AddDbContext<ApplicationDbContext>(options =>
             options.UseSqlServer(connectionString));
 
+        builder.Services.AddScoped<PersonController>();
         builder.Services.AddScoped<IPersonService, PersonService>();
         builder.Services.AddScoped<IResumeService, ResumeService>();
         builder.Services.AddScoped<IPersonRepository, PersonRepository>();
@@ -115,6 +117,14 @@ internal class Program
 
             });
         }
+
+        app.UseSwagger();
+        app.UseSwaggerUI(options =>
+        {
+            options.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
+            options.RoutePrefix = string.Empty;
+
+        });
 
         app.UseAuthentication();
         app.UseAuthorization();

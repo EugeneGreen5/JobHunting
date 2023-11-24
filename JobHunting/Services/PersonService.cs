@@ -46,7 +46,7 @@ public class PersonService : IPersonService
         return (new ExtensionDTO { Code = 200, Information = "Объект"}, currentPerson);
     }
 
-    public async Task<Person> GetPersonForAuth(String name, string password)
+    public async Task<Person> GetPersonForAuthAsync(String name, string password)
     {
         Person? currentPerson;
         foreach(var method in _listMethods)
@@ -62,7 +62,7 @@ public class PersonService : IPersonService
         var currentPerson = await _personRepository.GetPersonByIdAsync(id);
         if (currentPerson is null || newPerson is null) return new ExtensionDTO { Code = 404, Information = "Не найдено"};
 
-        _personRepository.UpdateByPerson(currentPerson, newPerson);
+        await _personRepository.UpdateByPerson(currentPerson, newPerson);
 
         return new ExtensionDTO { Code = 200, Information = "Обновлено" };
     }

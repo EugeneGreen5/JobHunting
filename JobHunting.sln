@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.7.34031.279
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JobHunting", "JobHunting\JobHunting.csproj", "{FBB66953-65C2-48E4-A70E-818250407FFC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JobHunting", "JobHunting\JobHunting.csproj", "{FBB66953-65C2-48E4-A70E-818250407FFC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test", "Test\Test.csproj", "{F24B5811-D7DE-4AD7-8E12-5F70132521D9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{FBB66953-65C2-48E4-A70E-818250407FFC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FBB66953-65C2-48E4-A70E-818250407FFC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FBB66953-65C2-48E4-A70E-818250407FFC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F24B5811-D7DE-4AD7-8E12-5F70132521D9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F24B5811-D7DE-4AD7-8E12-5F70132521D9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F24B5811-D7DE-4AD7-8E12-5F70132521D9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F24B5811-D7DE-4AD7-8E12-5F70132521D9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
