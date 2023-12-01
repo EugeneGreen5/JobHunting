@@ -2,7 +2,8 @@ using JobHunting.Services.Password;
 
 namespace Test;
 
-public class PasswordTest
+public class PasswordTest :
+    DockerFactoryFixture
 {
 
     [Theory]

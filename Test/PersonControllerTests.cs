@@ -1,49 +1,71 @@
-﻿using Microsoft.AspNetCore.Mvc.Testing;
+﻿using Bogus;
+using JobHunting.Models.Entity;
+using Microsoft.OpenApi.Validations;
 using System.Net;
+using System.Net.Http.Json;
+using Xunit;
 
 
 namespace Test;
-public class PersonControllerTests : IClassFixture<WebApplicationFactory<Program>>
+public class PersonControllerTests : 
+    IClassFixture<DockerFactoryFixture>
 {
-    private readonly WebApplicationFactory<Program> _factory;
+    private readonly DockerFactoryFixture _factory;
+    private HttpClient _client;
 
-    public PersonControllerTests(WebApplicationFactory<Program> factory)
+    public PersonControllerTests(DockerFactoryFixture factory)
     {
         _factory = factory;
+        _client = _factory.CreateClient();
     }
 
-    [Theory]
-    [InlineData("string","string")]
-    [InlineData("admin", "admin")]
-    public async Task CheckStatus_ShouldReturnOk(string name, string password)
+    [Fact]
+    public async Task AuthAsync_RegisteredUser_ShouldReturnOk()
     {
-        var client = _factory.CreateClient();
+        // Arrange
+        var person = GetPerson();
 
-        HttpResponseMessage response = await client.PostAsync($"/api/person/auth?name={name}&password={password}", null);
+        // Act
+        using var responsePost = await _client.PostAsJsonAsync("/api/person", person);
+
+        using var response = await _client.PostAsync($"/api/person/auth?name={person.Name}&password={person.Password}", null);
+
+        // Assert
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);  
     }
 
     [Theory]
-    [InlineData("321", "123")]
-    [InlineData("dsds", "123")]
-    public async Task CheckStatus_ShouldReturnNotFound(string name, string password)
+    [InlineData("string", "string")]
+    [InlineData("admin", "admin")]
+    public async Task AuthAsync_NonExistUser_ShouldReturnNotFound(string name, string password)
     {
-        var client = _factory.CreateClient();
+        // Act
+        using var response = await _client.PostAsync($"/api/person/auth?name={name}&password={password}", null);
 
-        HttpResponseMessage response = await client.PostAsync($"/api/person/auth?name={name}&password={password}", null);
+        // Assert
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
     }
 
     [Theory]
     [InlineData("/api/person")]
     [InlineData("/api/person/{14ada16c-64e0-448a-8cf5-deb87f68f53b}")]
-    public async Task CheckStatus_ShouldReturnUnauthorized(string path)
+    public async Task GetPersonByIdAsync_NonExistUser_ShouldReturnUnauthorized(string path)
     {
-        var client = _factory.CreateClient();
+        // Act
+        using var response = await _client.GetAsync(path);
 
-        HttpResponseMessage response = await client.GetAsync(path);
+        // Assert
         Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
     }
 
+    private JobHunting.Models.Entity.Person GetPerson() => new JobHunting.Models.Entity.Person
+    {
+        Id = Guid.NewGuid(),
+        Name = _faker.Internet.UserName(),
+        Password = _faker.Internet.Password(),
+        Email = _faker.Internet.Email(),
+        Phone = _faker.Phone.PhoneNumber()
+    };
 
+    private Faker _faker = new Faker("ru");
 }
